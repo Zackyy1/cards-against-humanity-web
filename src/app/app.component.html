@@ -1,49 +1,7 @@
 <!-- Navbar -->
-<div class="game">
-  <div class="navbar">
-    <h1>Cards against humanity</h1>
-  </div>
-
-  <div class="background">
-    <div class="card">
-      <h2>Join room <span>{{roomCodeString}}</span></h2>
-      <table>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>2</td>
-            <td>3</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>5</td>
-            <td>6</td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td>8</td>
-            <td>9</td>
-          </tr>
-          <tr>
-            <td><</td>
-            <td>0</td>
-            <td>GO</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h2 class="or">OR</h2>
-
-    <button class="create-new-game">Create game</button>
-  </div>
-
-
-  <!-- Entry (Landing) -->
-  <!-- Lobby -->
-  <!-- Game -->
-
-  
-  <router-outlet></router-outlet>
-  
+<div class="navbar">
+  <h1 (click)="home()">Cards against humanity</h1>
 </div>
+
+<router-outlet></router-outlet>
+  

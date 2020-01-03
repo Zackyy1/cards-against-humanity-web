@@ -1,3 +1,16 @@
-<p>
-  lobby works!
-</p>
+<div class="lobby-wrapper">
+  <div class="lobby">
+    <div class="spacer"></div>
+    <button class="server" (click)="getServerInfo()">Get server info</button>
+    <h2 class="players-title">Players</h2>
+    <div class="player-list" *ngIf="room && room.room && room.room.players.length > 0">
+      <div *ngFor="let player of room.room['players']" class="player">
+        <p [className]="player.isReady ? 'isReady' : 'noclass'">{{player.name}}</p>
+      </div>
+    </div>
+
+    <button class="ready-button" (click)="setReady()">Ready</button>
+  </div>
+  
+</div>
+

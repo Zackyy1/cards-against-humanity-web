@@ -1,0 +1,95 @@
+@import '../../styles.scss';
+
+.lobby-wrapper {
+    height: 100%;
+    margin-top: 50px;
+    position: relative;
+}
+
+.spacer {
+    height:20px;
+}
+
+.players-title {
+    color: $dark;
+    text-align: center;
+    font-size: 1.4rem;
+}
+
+.isReady {
+   &::after {
+       content: '✓';
+       position: absolute;
+       transform: scale(0);
+       top: 1px;bottom: 0;right: -10px;
+       animation: check 0.3s forwards 0s linear;
+   }
+}
+
+.ready-button {
+    text-align: center;
+    
+    // display: inline;
+    position: fixed;
+    padding: 1rem;
+    font-size: 2rem;
+    width: 120px;
+    
+    margin-left: -60px;
+    // margin: 0 auto;
+    right: 50%;left: 50%;
+    bottom: 10%;
+}
+
+@keyframes check {
+    0%{
+        transform: scale(0.2);
+    }50%{
+        transform: scale(2);
+    }100%{
+        transform: scale(1);
+    }
+}
+
+.lobby {
+    height: 100%;
+    background-color: $bg;
+    position: relative;
+    .player-list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        margin: 1rem 0;
+
+
+        .player {
+            padding: 0rem 2rem;
+            margin: 0.5rem 0;
+            min-width: 20%;
+            text-align: center;
+            font-size: 1.4rem;
+            line-height: 15px;
+            color: $dark;
+            box-shadow: 
+                -4px -4px 8px rgba(255, 255, 255, 0.64), 
+                4px 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            border-right: 1px solid rgba(255, 255, 255, 0.5);
+            
+            p {
+                position: relative;
+            }
+
+        }
+    }
+
+    .server {
+        padding: 0.6rem 1rem;
+        margin: 0 auto ;
+        display: flex;
+        font-size: 1.3rem;
+        
+    }
+}

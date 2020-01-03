@@ -1,15 +1,13 @@
 @import '../styles.scss';
 
-.game {
-    position: relative;
-    // min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    // padding-bottom: 5rem;
-}
 
 .navbar {
     background-color: $dark;
+    height: 50px;
+    position: absolute;
+    top: 0;right: 0;left: 0;
+    z-index: 500;
+    
     h1 {
         margin: 0;
         padding: 0.7rem;
@@ -18,97 +16,5 @@
         font-size: 1.5rem;
         text-align: center;
         color: white;
-    }
-}
-
-.background {
-    height: 100%;
-    width: 100%;
-    background-color: $bg;
-}
-
-.card {
-    // position: absolute;
-    width: 80%;
-    border-radius: 25px;
-    margin: 0 auto;
-    height: 80%;
-    margin-top: 2rem;
-    background-color: $light;
-    box-shadow: 
-    6px 6px 5px 0 rgba(0, 0, 0, 0.13),
-    -6px -6px 5px 0 rgba(255, 255, 255, 0.541);
-
-    h2 {
-        padding: 1rem 0.5rem 0;
-        text-align: center;
-        font-size: 1.8rem;
-        
-        span {
-            font-size: 2rem;
-        }
-    }
-
-    table {
-        margin: 0 auto;
-        border-spacing: 1rem;
-
-        td {
-            box-shadow: 
-            4px 4px 4px 0 rgba(0, 0, 0, 0.411),
-            -4px -4px 4px 0 rgb(255, 255, 255);
-            border-radius: 10px;
-            width: 65px;
-            height: 65px;
-            background-color: $dark;
-            color: white;
-            text-align: center;
-            font-size: 2rem;
-            position: relative;
-            transition: 0.2s;
-            &:active {
-                box-shadow: 
-                    inset 4px 4px 4px 0 rgba(0, 0, 0, 0.411),
-                    inset -4px -4px 4px 0 rgba(255, 255, 255, 0.137);
-                transition: 0.2s;
-            }
-
-            // &:hover {
-            //     transform: scale(1.1);
-            //     transition: 0.1s;
-            // }
-            
-        }
-    }
-
-}
-
-.or {
-    text-align: center;
-    font-size: 2rem;
-}
-
-.create-new-game {
-    font-size: 2rem;
-    color: white;
-    background-color: $dark;
-    text-align: center;
-    outline: none;
-    border: none;
-    border-radius: 15px;
-    display: flex;
-    margin: 0 auto;
-    padding: 0.5rem 1rem;
-    margin-bottom: 5rem;
-    box-shadow: 
-    6px 6px 5px 0 rgba(0, 0, 0, 0.13),
-    -6px -6px 5px 0 rgba(255, 255, 255, 0.541);
-    transition: 0.2s;
-
-    &:active {
-        box-shadow: 
-                    inset 4px 4px 4px 0 rgba(0, 0, 0, 0.411),
-                    inset -4px -4px 4px 0 rgba(255, 255, 255, 0.137);
-                transition: 0.2s;
     }
 }
