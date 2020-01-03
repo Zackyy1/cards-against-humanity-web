@@ -35,6 +35,9 @@
     height: 80%;
     margin-top: 2rem;
     background-color: $light;
+    box-shadow: 
+    6px 6px 5px 0 rgba(0, 0, 0, 0.13),
+    -6px -6px 5px 0 rgba(255, 255, 255, 0.541);
 
     h2 {
         padding: 1rem 0.5rem 0;
@@ -51,12 +54,29 @@
         border-spacing: 1rem;
 
         td {
+            box-shadow: 
+            4px 4px 4px 0 rgba(0, 0, 0, 0.411),
+            -4px -4px 4px 0 rgb(255, 255, 255);
+            border-radius: 10px;
             width: 65px;
             height: 65px;
             background-color: $dark;
             color: white;
             text-align: center;
             font-size: 2rem;
+            position: relative;
+            transition: 0.2s;
+            &:active {
+                box-shadow: 
+                    inset 4px 4px 4px 0 rgba(0, 0, 0, 0.411),
+                    inset -4px -4px 4px 0 rgba(255, 255, 255, 0.137);
+                transition: 0.2s;
+            }
+
+            // &:hover {
+            //     transform: scale(1.1);
+            //     transition: 0.1s;
+            // }
             
         }
     }
@@ -80,4 +100,15 @@
     margin: 0 auto;
     padding: 0.5rem 1rem;
     margin-bottom: 5rem;
+    box-shadow: 
+    6px 6px 5px 0 rgba(0, 0, 0, 0.13),
+    -6px -6px 5px 0 rgba(255, 255, 255, 0.541);
+    transition: 0.2s;
+
+    &:active {
+        box-shadow: 
+                    inset 4px 4px 4px 0 rgba(0, 0, 0, 0.411),
+                    inset -4px -4px 4px 0 rgba(255, 255, 255, 0.137);
+                transition: 0.2s;
+    }
 }

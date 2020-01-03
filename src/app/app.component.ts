@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery'
 import { isNumber } from 'util';
+import { Socket } from 'ngx-socket-io';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,6 +13,17 @@ export class AppComponent implements OnInit {
 
   roomCodeString:string = '____'
   roomCode: string = ''
+  
+  constructor(private socket: Socket) {
+    // socket.emit('hello')
+  }
+  ngOnInit() {
+    $('td').click(e=> {
+      let pressed = e.target.innerHTML
+      this.changeCode(pressed)
+    })
+    this.socket.emit('hello', 'LOL')
+  }
 
   changeCode(num) {
     if (this.roomCode.length > 3 && !(num.toString() == "&lt;")) {
@@ -47,12 +60,6 @@ export class AppComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    $('td').click(e=> {
-      let pressed = e.target.innerHTML
-      this.changeCode(pressed)
-
-    })
-  }
+ 
   
 }
