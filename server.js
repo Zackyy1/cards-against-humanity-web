@@ -3,18 +3,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 
-var game = [
-    {
-        room: '2323',
-        players: [
-          {'alexey': {
-            cards: [],
-            score: 0,
-          }},
-      ],
-
-}
-];
+var game = [];
 
 function getRoom(roomCode) {
   for (room in game) {
@@ -87,11 +76,12 @@ io.on('connection', function(socket) {
         game.push(
           {
             room: info.roomCode.toString(),
-            host:  info.roomCode.toString(),
+            host:  info.name,
             voters: [],
             czar: '',
             deck: {whites: [], blacks: []},
             trash: [],
+            readyPlayers: 1,
             players: [
               {
                 name: info.name,
@@ -107,12 +97,30 @@ io.on('connection', function(socket) {
         updateRoom(info.roomCode)
       });
 
+      socket.on('ready', e => {
+        setReady(e.roomCode, e.name)
+      })
 
       function updateRoom(roomCode) {
 
         console.log('SENDING', 'roomUpdate'+roomCode)
         io.emit('roomUpdate'+roomCode.toString(), {
           room: getRoom(roomCode)
+        })
+      }
+
+      function setReady(roomCode, playerName) {
+        console.log(roomCode, playerName)
+        const room = getRoom(roomCode)
+        room && room.players.map(player => {
+
+          if (player.name == playerName) {
+            player.isReady = true
+            room.readyPlayers++;
+            console.log(playerName,'is now ready')
+            updateRoom(roomCode)
+            return true
+          }
         })
       }
       

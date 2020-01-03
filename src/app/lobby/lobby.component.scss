@@ -2,12 +2,22 @@
 
 .lobby-wrapper {
     height: 100%;
-    margin-top: 50px;
+    margin-top: 40px;
     position: relative;
 }
 
 .spacer {
     height:20px;
+}
+
+.myname {
+    text-decoration: underline;
+}
+
+.room-code {
+    text-align: center;
+    color: $dark;
+    font-size: 2rem;
 }
 
 .players-title {
@@ -17,13 +27,20 @@
 }
 
 .isReady {
-   &::after {
-       content: '✓';
-       position: absolute;
-       transform: scale(0);
-       top: 1px;bottom: 0;right: -10px;
-       animation: check 0.3s forwards 0s linear;
-   }
+//    &::after {
+//        content: '✓';
+//        position: absolute;
+//        transform: scale(0);
+//        top: 1px;bottom: 0;right: -10px;
+//        animation: check 0.3s forwards 0s linear;
+//    }
+    color: green;
+}
+
+.host-title {
+    text-align: center;
+    color: $dark;
+
 }
 
 .ready-button {
@@ -38,7 +55,25 @@
     margin-left: -60px;
     // margin: 0 auto;
     right: 50%;left: 50%;
-    bottom: 10%;
+    bottom: 3%;
+}
+
+.buttons-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.host-button-start {
+    text-align: center;
+    position: fixed;
+    padding: 1rem;
+    font-size: 2rem;
+    width: 220px;
+    margin-left: -110px;
+    right: 50%;left: 50%;
+    bottom: 20%;
 }
 
 @keyframes check {

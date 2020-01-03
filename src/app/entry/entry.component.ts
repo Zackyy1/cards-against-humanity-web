@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import * as $ from 'jquery'
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-entry',
@@ -15,7 +16,8 @@ export class EntryComponent implements OnInit {
   
   constructor(
     private socket: Socket,
-    private router: Router
+    private router: Router,
+    private cookie: CookieService
     ) {
     // socket.emit('hello')
   }
@@ -24,6 +26,8 @@ export class EntryComponent implements OnInit {
       let pressed = e.target.innerHTML
       this.changeCode(pressed)
     })
+
+
     
   }
 
@@ -64,6 +68,10 @@ export class EntryComponent implements OnInit {
   }
 
   tryJoin() {
+    if ($('#name')[0].value.length < 1 || $('#name')[0].value.length > 13) {
+      alert('Invalid name!')
+    } else {
+      this.cookie.set('name', $('#name')[0].value, 1)
     this.socket.emit('join', {code: this.roomCode, name: $('#name')[0].value})
     this.socket.once('joinResponse', (e) => {
       console.log('returned', e)
@@ -72,9 +80,11 @@ export class EntryComponent implements OnInit {
         this.router.navigateByUrl('lobby/'+e.roomCode)
       } else if (e.code == 'ERROR') {
         console.error(e.body)
+        alert(e.body)
 
       }
     })
+  }
   }
 
    getRandomInt(min, max) {
@@ -84,12 +94,22 @@ export class EntryComponent implements OnInit {
 }
 
   createRoom() {
-    const newRoomCode = this.getRandomInt(1000, 9999)
-    this.socket.emit('createRoom', {roomCode: newRoomCode, name: $('#name')[0].value})
-    this.socket.once('joinCreatedRoom', (e) => {
-      
-      this.router.navigateByUrl('/lobby/'+e.roomCode)
-    })
+    if ($('#name')[0].value.length < 1 || $('#name')[0].value.length > 13) {
+      alert('Invalid name!')
+    } else {
+      this.cookie.set('name', $('#name')[0].value, 1)
+      const newRoomCode = this.getRandomInt(1000, 9999)
+      this.socket.emit('createRoom', {roomCode: newRoomCode, name: $('#name')[0].value})
+      this.socket.once('joinCreatedRoom', (e) => {
+        
+        this.router.navigateByUrl('/lobby/'+e.roomCode)
+      })
+    }
+  }
+
+  showPad() {
+    $('.card-wrapper').animate({maxHeight:"100%", paddingBottom:'0.5rem'}, 10)
+
   }
 
 

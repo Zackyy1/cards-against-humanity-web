@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { EntryComponent } from './entry/entry.component';
+import { CookieService } from 'ngx-cookie-service'
 // var config: SocketIoConfig = { url: 'http://90.190.166.179:4444', options: {} };
 var config: SocketIoConfig = { url: 'http://localhost:4444', options: {} };
 
@@ -21,7 +22,7 @@ var config: SocketIoConfig = { url: 'http://localhost:4444', options: {} };
     SocketIoModule.forRoot(config)
 
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

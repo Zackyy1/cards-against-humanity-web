@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import * as $ from 'jquery'
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-lobby',
@@ -11,9 +12,13 @@ import { Router } from '@angular/router';
 export class LobbyComponent implements OnInit {
   roomCode:number
   room: Object
+  myName:string
 
+  constructor(private socket: Socket,
+    private cookie: CookieService) {
+    this.myName = cookie.get('name')
+    console.log('My name is', this.myName)
 
-  constructor(private socket: Socket) {
     const url = document.URL
     this.roomCode = Number(url.substring(url.search('lobby/')+'lobby/'.length, url.length))
     console.log('RECIEVING', 'roomUpdate'+this.roomCode.toString())
@@ -38,6 +43,7 @@ export class LobbyComponent implements OnInit {
 
   setReady() {
     // TODO:
+    this.socket.emit('ready', {roomCode:this.roomCode, name: this.myName})
   }
 
 }
