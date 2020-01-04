@@ -11,7 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class LobbyComponent implements OnInit {
   roomCode:number
-  room: Object
+  room
   myName:string
 
   constructor(private socket: Socket,

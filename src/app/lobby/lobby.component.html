@@ -3,21 +3,20 @@
     <div class="spacer"></div>
     <button class="server" (click)="getServerInfo()">Get server info</button>
     <h2 class="room-code">Room #{{roomCode}}</h2>
-    <h3 class="host-title" *ngIf="room && room.room.host == myName">You're the host!</h3>
+    <h3 class="host-title" *ngIf="room && room.host == myName">You're the host!</h3>
     <h2 class="players-title">Players</h2>
-    <div class="player-list" *ngIf="room && room.room && room.room.players.length > 0">
-      <div *ngFor="let player of room.room['players']" class="player">
+    <div class="player-list" *ngIf="room && room.players.length > 0">
+      <div *ngFor="let player of room.players" class="player">
         <p [className]="player.isReady ? 'isReady' : 'noclass' ">
           <span [className]="player.name == myName ? 'myname' : 'noclass2'">
             {{player.name}}
           </span>
-          
         </p>
       </div>
     </div>
 
     <div class="buttons-wrapper">
-      <button class="host-button-start" *ngIf="room && room.room.host == myName && room.room.readyPlayers > 1 && room.room.readyPlayers >= room.room.players.length">Start game</button>
+      <button class="host-button-start" *ngIf="room && room.host == myName && room.readyPlayers > 1 && room.readyPlayers >= room.players.length">Start game</button>
       <button class="ready-button" (click)="setReady()">Ready</button>
     </div>
     
