@@ -1,9 +1,27 @@
 var app = require("express")();
-var http = require("http");
+var https = require("https");
 var fs = require("fs");
 var admin = require("firebase-admin");
 
 var serviceAccount = require("./cah-web-4f057-firebase-adminsdk-54ath-29f0561f4f.json");
+
+
+var server = https.createServer(
+  {
+    key: fs.readFileSync('./cards.rendemental.com.key'),
+    cert: fs.readFileSync('./cards_rendemental_com.crt'),
+    ca: fs.readFileSync('./cards_rendemental_com.ca-bundle'),
+    // secure: false,
+    // rejectUnauthorized: false,
+  },
+  app
+);
+
+var io = require("socket.io")(server);
+
+const originalDeck = JSON.parse(fs.readFileSync("cards-extended.json"));
+
+var game = [];
 
 // Initialize the app with a service account, granting admin privileges
 admin.initializeApp({
@@ -13,11 +31,12 @@ admin.initializeApp({
     uid: "firebase-adminsdk-54ath@cah-web-4f057.iam.gserviceaccount.com"
   }
 });
+var db = admin.database();
 
 function updateRoom(roomCode) {
   getRoom(roomCode.toString()).then(e => {
     // console.log('SENDING ROOM!!', e)
-    const res = e.toJSON();
+    let res = e.toJSON();
     res = parseRoom(res);
     io.emit("roomUpdate" + roomCode.toString(), res);
   });
@@ -53,9 +72,8 @@ function parseRoom(room) {
   return room;
 }
 
-var db = admin.database();
-var ref = db.ref("/");
-ref.update({ hell3: { hello2: "world2" } });
+
+
 
 async function getRoom(roomCode) {
   return await db
@@ -79,21 +97,6 @@ function updateRoomDb(roomCode, updatedRoom) {
   return db.ref("/rooms/" + roomCode).update(updatedRoom);
 }
 
-var server = http.createServer(
-  {
-    // key: fs.readFileSync('./server.key'),
-    // cert: fs.readFileSync('./server.cert'),
-    // ca: fs.readFileSync('./ca.crt'),
-    // rejectUnauthorized: false,
-  },
-  app
-);
-
-var io = require("socket.io")(server);
-
-const originalDeck = JSON.parse(fs.readFileSync("cards-extended.json"));
-
-var game = [];
 
 io.on("connection", function(socket) {
   console.log("User connected");
