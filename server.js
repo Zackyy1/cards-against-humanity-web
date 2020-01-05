@@ -5,17 +5,39 @@ var admin = require("firebase-admin");
 
 var serviceAccount = require("./cah-web-4f057-firebase-adminsdk-54ath-29f0561f4f.json");
 
+const cors = require('cors')({origin: true});
+app.use(cors);
 
 var server = https.createServer(
   {
     key: fs.readFileSync('./cards.rendemental.com.key'),
     cert: fs.readFileSync('./cards_rendemental_com.crt'),
     ca: fs.readFileSync('./cards_rendemental_com.ca-bundle'),
-    // secure: false,
-    // rejectUnauthorized: false,
   },
   app
 );
+
+// var options = {
+//       key: fs.readFileSync('./cards.rendemental.com.key'),
+//       cert: fs.readFileSync('./cards_rendemental_com.crt'),
+//       ca: fs.readFileSync('./cards_rendemental_com.ca-bundle'),
+
+//     }
+
+// const server = https.createServer(options, (req, res) => {
+  
+//   res.statusCode = 301;
+//    res.setHeader('Location', `https://cards.rendemental.com/${req.url}`);
+//   //  res.end(); // make sure to call send() or end() to send the response
+//   res.end("<h1>HTTPS server running</h1>");
+// });
+
+// app.use((req, res, next) => {
+//   if(req.protocol === 'http') {
+//     res.redirect(301, `https://${req.headers.host}${req.url}`);
+//   }
+//   next();
+// });
 
 var io = require("socket.io")(server);
 
@@ -215,6 +237,14 @@ io.on("connection", function(socket) {
   });
 });
 
+// app.get('/', (req, res) => {
+//   console.log(req, res)
+// })
+
+
+
 server.listen(4444, function() {
   console.log("listening on *:4444");
 });
+
+
