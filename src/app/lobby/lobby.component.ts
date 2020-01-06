@@ -15,7 +15,8 @@ export class LobbyComponent implements OnInit {
   myName:string
 
   constructor(private socket: Socket,
-    private cookie: CookieService) {
+    private cookie: CookieService,
+    private router: Router) {
     this.myName = cookie.get('name')
     console.log('My name is', this.myName)
 
@@ -34,6 +35,9 @@ export class LobbyComponent implements OnInit {
     this.socket.on('roomUpdate'+this.roomCode.toString(), room => {
       console.log('Update recieved:', room)
       this.room = room
+      if (room['gameStatus'] && room['gameStatus'] == 'game') {
+        this.router.navigateByUrl('game/'+this.roomCode)
+      }
     })
   }
 

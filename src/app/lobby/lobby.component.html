@@ -17,7 +17,7 @@
 
     <div class="buttons-wrapper">
       <button class="host-button-start" *ngIf="room && room.host == myName && room.readyPlayers > 1 && room.readyPlayers >= room.players.length">Start game</button>
-      <button class="ready-button" (click)="setReady()">Ready</button>
+      <button class="ready-button" *ngIf="room && room.host != myName" (click)="setReady()">Ready</button>
     </div>
     
   </div>

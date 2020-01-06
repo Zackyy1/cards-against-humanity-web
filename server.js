@@ -8,22 +8,9 @@ var admin = require("firebase-admin");
 
 var serviceAccount = require("./cah-web-4f057-firebase-adminsdk-54ath-29f0561f4f.json");
 
-// const cors = require('cors')({origin: true});
-// app.use(cors);
+app.use(bodyParser.json())
 
-app
-  // .use(compression())
-  .use(bodyParser.json())
-  // .use(express.static(html))
-  // .use(forceSsl)
-  .use((req, res, next) => {
-   if(req.protocol === 'http') {
-     res.redirect(301, `https://${req.headers.host}${req.url}`);
-   }
-   next();
-})
-
-var server = https.createServer(
+var server = http.createServer(
   {
     key: fs.readFileSync('./cards.rendemental.com.key', 'utf-8').toString(),
     cert: fs.readFileSync('./cards_rendemental_com.crt', 'utf-8').toString(),
@@ -36,18 +23,9 @@ var server = https.createServer(
   app
 );
 
-
-const server2 = http.createServer(app)
-  
-
-
 server.listen(4444, function() {
   console.log("listening on *:4444");
 });
-
-// server2.listen(4444, function() {
-//   console.log("listening on *:4444");
-// });
 
 
 var io = require("socket.io")(server);
@@ -92,6 +70,10 @@ function setReady(roomCode, playerName) {
           player.isReady = true;
           room.readyPlayers++;
           console.log(playerName, "is now ready");
+          if (room.players.length == room.readyPlayers) {
+            console.log('All players ready, starting game')
+            room['gameStatus'] = 'game'
+          }
           updateRoomDb(roomCode, room);
           updateRoom(roomCode);
           return true;
@@ -236,6 +218,7 @@ io.on("connection", function(socket) {
      * Deal cards and remove dealt cards from deck
      * Show cards for every user
      */
+
     
 
   });
