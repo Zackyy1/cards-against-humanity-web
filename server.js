@@ -1,46 +1,63 @@
-var app = require("express")();
+var express = require("express");
+var app = express();
 var https = require("https");
+var http = require("http");
+var bodyParser = require('body-parser');
 var fs = require("fs");
 var admin = require("firebase-admin");
 
 var serviceAccount = require("./cah-web-4f057-firebase-adminsdk-54ath-29f0561f4f.json");
 
-const cors = require('cors')({origin: true});
-app.use(cors);
+// const cors = require('cors')({origin: true});
+// app.use(cors);
+
+app
+  // .use(compression())
+  .use(bodyParser.json())
+  // .use(express.static(html))
+  // .use(forceSsl)
+  .use((req, res, next) => {
+   if(req.protocol === 'http') {
+     res.redirect(301, `https://${req.headers.host}${req.url}`);
+   }
+   next();
+})
 
 var server = https.createServer(
   {
-    key: fs.readFileSync('./cards.rendemental.com.key'),
-    cert: fs.readFileSync('./cards_rendemental_com.crt'),
-    ca: fs.readFileSync('./cards_rendemental_com.ca-bundle'),
+    key: fs.readFileSync('./cards.rendemental.com.key', 'utf-8').toString(),
+    cert: fs.readFileSync('./cards_rendemental_com.crt', 'utf-8').toString(),
+    ca: fs.readFileSync('./cards_rendemental_com.ca-bundle', 'utf-8').toString(),
+    // hostname: 'cards.rendemental.com',
+    // port: 443, 
+    requestCert: false,
+    rejectUnauthorized: false
   },
   app
 );
 
-// var options = {
-//       key: fs.readFileSync('./cards.rendemental.com.key'),
-//       cert: fs.readFileSync('./cards_rendemental_com.crt'),
-//       ca: fs.readFileSync('./cards_rendemental_com.ca-bundle'),
 
-//     }
-
-// const server = https.createServer(options, (req, res) => {
+const server2 = http.createServer(app)
   
-//   res.statusCode = 301;
-//    res.setHeader('Location', `https://cards.rendemental.com/${req.url}`);
-//   //  res.end(); // make sure to call send() or end() to send the response
-//   res.end("<h1>HTTPS server running</h1>");
+
+
+server.listen(4444, function() {
+  console.log("listening on *:4444");
+});
+
+// server2.listen(4444, function() {
+//   console.log("listening on *:4444");
 // });
 
-// app.use((req, res, next) => {
-//   if(req.protocol === 'http') {
-//     res.redirect(301, `https://${req.headers.host}${req.url}`);
-//   }
-//   next();
-// });
 
 var io = require("socket.io")(server);
-
+io.set('transports', ['websocket',
+    'flashsocket',
+    'htmlfile',
+    'xhr-polling',
+    'jsonp-polling',
+    'polling']);
+    
 const originalDeck = JSON.parse(fs.readFileSync("cards-extended.json"));
 
 var game = [];
@@ -243,8 +260,5 @@ io.on("connection", function(socket) {
 
 
 
-server.listen(4444, function() {
-  console.log("listening on *:4444");
-});
 
 

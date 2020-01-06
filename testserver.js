@@ -11,13 +11,6 @@ var admin = require("firebase-admin");
 var serviceAccount = require("./cah-web-4f057-firebase-adminsdk-54ath-29f0561f4f.json");
 
 
-
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
-
   const html = __dirname + '/dist/cards-against-humanity';
   const apiUrl = '/api';
   const port = 4444;
@@ -25,37 +18,64 @@ app.use(function(req, res, next) {
 
   // Start server
 
-  var key = fs.readFileSync('./cards.rendemental.com.key', 'utf8').toString();
-  var cert = fs.readFileSync('./cards_rendemental_com.crt', 'utf8').toString();
-  var ca = fs.readFileSync('./cards_rendemental_com.ca-bundle', 'utf8').toString();
+  const key = fs.readFileSync('./cards.rendemental.com.key');
+  const cert = fs.readFileSync('./cards_rendemental_com.crt');
+  const ca = fs.readFileSync('./cards_rendemental_com.ca-bundle');
 
+  var forceSsl = require('express-force-ssl');
+
+
+const cors = require('cors')({origin: '*'});
+
+
+// app
   app
   .use(compression())
+  .use(cors)
   .use(bodyParser.json())
   .use(express.static(html))
   .use(function(req, res) {
+    
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.setHeader('Access-Control-Allow-Origin', 'https://90.190.166.179:4444');
+    res.setHeader('Access-Control-Allow-Origin', 'https://cards.rendemental.com');
+    res.setHeader('Access-Control-Allow-Origin', 'https://cards.rendemental.com:4444');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.setHeader('Access-Control-Allow-Credentials', true);
     res.sendFile(html + '/index.html');
-    }
-)
-
+    // next();
+    })
+ 
+// .use((req, res, next) => {
+//    if(req.protocol === 'http') {
+//      res.redirect(301, `https://${req.headers.host}${req.url}`);
+//    }
+//    next();
+// })
 
   var server = https.createServer(
       {
           key,
           cert,
-        //   ca,
-    // hostname: 'cards.rendemental.com',
-    // port: 443, 
+          ca,
+    hostname: 'cards.rendemental.com',
+    port: 443, 
     requestCert: false,
     rejectUnauthorized: false}, 
-app)
+app);
   
-  var server2 = http.createServer(app)
+  var server2 = http.createServer(app);
   
 
-  server.listen(4444, "0.0.0.0", function () {
+  server.listen(4444, function () {
         console.log('Started listening on *4444')
   });
+
+//   server2.listen(4443, '0.0.0.0', function () {
+//     console.log('Started listening on *4443')
+// });
 
 
  
