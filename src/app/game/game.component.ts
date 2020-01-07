@@ -45,10 +45,13 @@ export class GameComponent implements OnInit {
       this.cardsShown = !this.cardsShown
       // hide cards
       $('.img-wrapper').removeClass('top')
+      // $('.my-cards-button').toFront();
     } else {
       this.cardsShown = !this.cardsShown
       // show cards
       $('.img-wrapper').addClass('top')
+      // $('.my-cards-button').toFront();
+
     }
   }
 

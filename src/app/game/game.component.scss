@@ -41,14 +41,25 @@ $img-color: #2a2824;
     
 }
 
+.dim-bg {
+    background-color: rgba(0, 0, 0, 0.336);
+    position: fixed;
+    // width: 100%;
+    // height: 100%;
+    // margin-top: -140px !important;
+    bottom: 0;top: 0;right: 0;left: 0;
+    z-index: 1;
+}
+
 .my-cards {
     position: absolute;
     margin-top: 0px;
-    background-color: rgba(0, 0, 0, 0.336);
+    // background-color: rgba(0, 0, 0, 0.336);
     top: 0;bottom: 0;left: 0;right: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    // overflow: hidden;
+    z-index: 4;
 }
 
 .white-card-wrapper-left {
@@ -99,6 +110,8 @@ $img-color: #2a2824;
 .my-cards-button {
     margin: 0 auto;
     width: 100%;
+    z-index: 300;
+    position: absolute;
     .img-wrapper {
         margin: 0 auto;
         img {
@@ -117,7 +130,7 @@ $img-color: #2a2824;
 }
 
 .top {
-    z-index: 500;
+    z-index: 500 !important;
     img {
         transform: rotate(180deg);
     }
