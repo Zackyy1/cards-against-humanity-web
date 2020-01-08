@@ -15,6 +15,7 @@ export class GameComponent implements OnInit {
   myName: string;
   cardsShown: boolean = false
   myCards
+  helperText: string = "Game is on!"
   currentCardInFrontIndex = 1
 
   @Output() selectedCards: Array<string> = []
@@ -40,10 +41,20 @@ export class GameComponent implements OnInit {
       this.room = room
       
       this.room.players.map(plr => {
+        // plr.cards = this.objectToArray(plr.cards)c
+        plr.cards = this.objectToArray(plr.cards)
+        // console.log('Comparing', plr, this.myName)
         if (plr.name == this.myName) {
-          this.myCards = this.objectToArray(plr.cards)
+          this.myCards = plr.cards
+          console.log(plr.name, 'THIS MYCARDS', this.myCards)
+          return true
         }
       })
+    })
+
+    this.socket.on('judgement'+this.roomCode, e => {
+      this.cardsShown = false
+      this.helperText = this.room.czar + " is choosing the best card, you fools!"
     })
 
     $('.my-cards-button').click( e => {
@@ -63,6 +74,10 @@ export class GameComponent implements OnInit {
     });
    
     return arr;
+  }
+
+  restartRound() {
+    this.socket.emit('restartRound', this.room)
   }
 
   test() {

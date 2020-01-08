@@ -2,9 +2,14 @@
 
   <div class="dim-bg"  *ngIf="cardsShown == true"></div>
 
+  <h2 class="you-are-czar" *ngIf="room && myName == room['czar']" >You are the Czar!</h2>
+  <h2 class="you-are-czar" *ngIf="room && myName != room['czar']" >{{room['czar']}} is the Czar!</h2>
+  <h2 class="helper">{{helperText}}</h2>
+
+  <button class="test-btn" (click)="restartRound()">Restart round</button>
   <div class="black-card-wrapper">
     <div class="black-card">
-      <p class="black-card-text">Who you gonna call? ______ </p>
+      <p class="black-card-text" *ngIf="room && room.black">{{room.black.text}}</p>
     </div>
   </div>
 
@@ -17,8 +22,5 @@
     <h2 class="my-cards-label">My cards</h2>
   </div>
 
-  <!-- <ng-template #forHost>
-    <h2>I'm host!</h2>
-  </ng-template> -->
   
 </div>

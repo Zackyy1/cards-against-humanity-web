@@ -8,12 +8,29 @@ $img-color: #2a2824;
    
 }
 
+.helper {
+    text-align: center;
+    padding: 0 0.5rem;
+    font-size: 1.2rem;
+    margin: auto 1rem;
+    // margin-top: 5rem;
+    color: $dark;
+}
+
+.you-are-czar {
+    text-align: center;
+    padding: 0 0.5rem;
+    margin: auto 1rem;
+    margin-top: 5rem;
+    color: $dark;
+}
+
 .black-card-wrapper {
    
     width: $card-width;
     // padding-bottom: 75%;
     margin: 0 auto;
-    margin-top: 7rem;
+    margin-top: 1rem;
     position: relative;
 }
 

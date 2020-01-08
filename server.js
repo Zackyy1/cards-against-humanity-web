@@ -2,21 +2,23 @@ var express = require("express");
 var app = express();
 var https = require("https");
 var http = require("http");
-var bodyParser = require('body-parser');
+var bodyParser = require("body-parser");
 var fs = require("fs");
 var admin = require("firebase-admin");
 
 var serviceAccount = require("./cah-web-4f057-firebase-adminsdk-54ath-29f0561f4f.json");
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 var server = http.createServer(
   {
-    key: fs.readFileSync('./cards.rendemental.com.key', 'utf-8').toString(),
-    cert: fs.readFileSync('./cards_rendemental_com.crt', 'utf-8').toString(),
-    ca: fs.readFileSync('./cards_rendemental_com.ca-bundle', 'utf-8').toString(),
+    key: fs.readFileSync("./cards.rendemental.com.key", "utf-8").toString(),
+    cert: fs.readFileSync("./cards_rendemental_com.crt", "utf-8").toString(),
+    ca: fs
+      .readFileSync("./cards_rendemental_com.ca-bundle", "utf-8")
+      .toString(),
     // hostname: 'cards.rendemental.com',
-    // port: 443, 
+    // port: 443,
     requestCert: false,
     rejectUnauthorized: false
   },
@@ -27,15 +29,25 @@ server.listen(4444, function() {
   console.log("listening on *:4444");
 });
 
+function objectToArray(obj) {
+  let arr = [];
+  var arr_obj = Object.keys(obj).map(key => {
+    arr.push(obj[key]);
+  });
+ 
+  return arr;
+}
 
 var io = require("socket.io")(server);
-io.set('transports', ['websocket',
-    'flashsocket',
-    'htmlfile',
-    'xhr-polling',
-    'jsonp-polling',
-    'polling']);
-    
+io.set("transports", [
+  "websocket",
+  "flashsocket",
+  "htmlfile",
+  "xhr-polling",
+  "jsonp-polling",
+  "polling"
+]);
+
 const originalDeck = JSON.parse(fs.readFileSync("cards-extended.json"));
 
 var game = [];
@@ -61,7 +73,7 @@ function updateRoom(roomCode) {
 
 function setReady(roomCode, playerName) {
   console.log(roomCode, playerName);
-  const room = getRoom(roomCode).then(e => {
+  const room2 = getRoom(roomCode).then(e => {
     let room = e.toJSON();
     room = parseRoom(room);
     room &&
@@ -71,10 +83,11 @@ function setReady(roomCode, playerName) {
           room.readyPlayers++;
           console.log(playerName, "is now ready");
           if (room.players.length == room.readyPlayers) {
-            console.log('All players ready, starting game')
-            room['gameStatus'] = 'game'
-            room = startGameForRoom(room)
+            console.log("All players ready, starting game");
+            room["gameStatus"] = "game";
+            room = startGameForRoom(room);
           }
+          startRound(roomCode, room);
           updateRoomDb(roomCode, room);
           updateRoom(roomCode);
           return true;
@@ -88,7 +101,7 @@ function parseRoom(room) {
   let arr = [];
   var arr_obj = Object.keys(obj).map(key => {
     arr.push(obj[key]);
-    console.log("Working on", obj[key]);
+    // console.log("Working on", obj[key]);
   });
   room.players = arr;
   return room;
@@ -99,14 +112,28 @@ function objectToArray(obj) {
   var arr_obj = Object.keys(obj).map(key => {
     arr.push(obj[key]);
   });
- 
+
   return arr;
 }
 
-Array.prototype.random = function () {
-  return this[Math.floor((Math.random()*this.length))];
-}
+Array.prototype.random = function() {
+  return this[Math.floor(Math.random() * this.length)];
+};
 
+function startRound(roomCode, room) {
+  room = parseRoom(room);
+  // Assign a black card to the room
+  const randomCart = originalDeck.black.random();
+  room["black"] = { text: randomCart.text, pick: randomCart.pick };
+  console.log("Assigning a black card:", room["black"]);
+
+  // Choose a czar
+  room["czar"] = room.players.random().name;
+  console.log("Assigning a czar:", room["czar"]);
+
+  // Wait for all to select cards
+  room["selectedCards"] = {};
+}
 
 function startGameForRoom(room) {
   /**
@@ -114,25 +141,24 @@ function startGameForRoom(room) {
    * Deal cards and remove dealt cards from deck
    * Show cards for every user
    */
-  console.log('STARTING GAME:', room)
-  let players = room.players
-  
-  
+  // console.log('STARTING GAME:', room)
+  let players = room.players;
+
   players.map(player => {
-    let cards = player['cards'] = []
+    let cards = (player["cards"] = []);
     for (let i = 0; i < 10; i++) {
-      const cardToDeal = originalDeck.white.random()
-      player.cards.push(cardToDeal)
+      let cardToDeal = originalDeck.white.random();
+      // cardToDeal = originalDeck.white.random()
+      // cardToDeal = originalDeck.white.random()
+      player.cards.push(cardToDeal);
     }
-    player.cards = objectToArray(player.cards)
+    player.cards = objectToArray(player.cards);
+  });
 
-  })
+  updateRoomDb(room.room, room);
+  updateRoom(room.room);
 
-  updateRoomDb(room.room, room)
-
-  return room
-  // console.log('TESTING DEALT CARDS:', room)
-
+  return room;
 }
 
 async function getRoom(roomCode) {
@@ -140,15 +166,15 @@ async function getRoom(roomCode) {
     .ref("/rooms/" + roomCode.toString())
     .once(await "value", e => {
       const res = e.toJSON();
-      console.log("Room #" + roomCode.toString(), res);
+      // console.log("Room #" + roomCode.toString(), res);
       let obj = res.players;
       let arr = [];
       var arr_obj = Object.keys(obj).map(key => {
         arr.push(obj[key]);
-        console.log("Working on", obj[key]);
+        // console.log("Working on", obj[key]);
       });
       res.players = arr;
-      console.log("DEBUG", res);
+      // console.log("DEBUG", res);
       return res;
     });
 }
@@ -156,7 +182,6 @@ async function getRoom(roomCode) {
 function updateRoomDb(roomCode, updatedRoom) {
   return db.ref("/rooms/" + roomCode).update(updatedRoom);
 }
-
 
 io.on("connection", function(socket) {
   console.log("User connected");
@@ -223,6 +248,12 @@ io.on("connection", function(socket) {
     });
   });
 
+  socket.on("restartRound", room => {
+    startRound(room.room, room);
+    updateRoomDb(room.room, room);
+    updateRoom(room.room);
+  });
+
   socket.on("createRoom", info => {
     let newRoom = {
       room: info.roomCode.toString(),
@@ -251,7 +282,50 @@ io.on("connection", function(socket) {
     setReady(e.roomCode, e.name);
   });
 
+  // socket.on("cardsChosen", (room, player) => {
+  //   console.log(player.name,'has chosen a card. It\'s:', player.chosenCards)
+  // })
+
+  socket.on("cardSelected", obj => {
+    // let room = obj.room;
+    
+    let room2 = getRoom(obj.room.room).then(room=> {
+      room = parseRoom(room.toJSON())
+      
+      console.log('WHAT IS THIS?', room)
+      let player = obj.player;
+      let cards = obj.cards;
+      // console.log('Recieved:', room, player, cards)
+      // room = parseRoom(room)
   
+  
+      cards = objectToArray(cards)
+      room.players.map(plr => {
+        plr.cards = objectToArray(plr.cards)
+        if (plr.name == player.name) {
+          console.log(player.name, "has selected a card", cards);
+          console.log('Checking selected cards:', room['selectedCards'])
+          if (room["selectedCards"] == null) {
+            room["selectedCards"] = {};
+            console.log("RESET");
+          }
+          room["selectedCards"][player.name] = cards[0];
+          console.log("Updated selected cards:", room["selectedCards"]);
+          if (Object.keys(room['selectedCards']).length == room.players.length-1) {
+            // All have chosen a card
+            console.log('Everyone has chosen a card')
+            io.emit('judgement'+room.room)
+          }
+          updateRoomDb(room.room, room);
+        }
+      });
+      
+      // updateRoom(room.room);
+    })
+
+    
+  });
+ 
 
   socket.on("requestUpdate", e => {
     updateRoom(e);
@@ -270,8 +344,3 @@ io.on("connection", function(socket) {
 // app.get('/', (req, res) => {
 //   console.log(req, res)
 // })
-
-
-
-
-

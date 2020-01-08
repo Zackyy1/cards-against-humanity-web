@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
-import { info } from 'console';
 import * as $ from 'jquery'
+import { Socket } from 'ngx-socket-io';
 @Component({
   selector: 'app-mycards',
   templateUrl: './mycards.component.html',
@@ -16,7 +16,7 @@ export class MycardsComponent implements OnInit {
   @Input() selectedCards: Array<string>
   @Input() myName: string
 
-  constructor() { 
+  constructor(private socket: Socket) { 
   }
 
   ngOnInit() {
@@ -30,17 +30,19 @@ export class MycardsComponent implements OnInit {
     // console.log(room, myName)
   }
 
+  findPlayerInPlayers(playerName) {
+    
+  }
+
   trySelecting(e) {
     const label = $(e.target)
     const isSelected = $(label[0].parentElement).hasClass('selected');
     // const isSelected = false;
     const but = $(label[0].parentElement)
 
-    // Clear all selection if gotta choose 1
-    // Check FOR 1 WHEN ITS DONE
+    // CHOOSE 1
 
-
-    if (but.hasClass('indicator')) {
+    if (but.hasClass('indicator') && this.room.black.pick == 1) {
 
         if ($('.indicator').hasClass('selected')) {
           $('.indicator').removeClass('selected')
@@ -60,9 +62,24 @@ export class MycardsComponent implements OnInit {
           label[0].innerHTML = '✔'
           this.selectedCards = []
           this.selectedCards.push($(but[0].parentElement)[0].children[0].innerText)
-        }
-      }
-    
+          // let player = this.findPlayerInPlayers(this.myName)['name'];
+          // console.log('IS THIS MY NAME?', player)
+          this.room.players.map(plr => {
+            if (plr.name == this.myName) {
+              this.socket.emit('cardSelected', 
+            {
+              room: this.room, 
+              player: plr, 
+              cards: this.selectedCards}
+            )
+            
+            }
+          })
+        }  
+    } else if (but.hasClass('indicator') && this.room.black.pick > 1) {
+      // Deal with pick 2-3 here
     }
+    
+  }
 
 }
