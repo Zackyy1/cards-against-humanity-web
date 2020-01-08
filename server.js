@@ -73,6 +73,7 @@ function setReady(roomCode, playerName) {
           if (room.players.length == room.readyPlayers) {
             console.log('All players ready, starting game')
             room['gameStatus'] = 'game'
+            room = startGameForRoom(room)
           }
           updateRoomDb(roomCode, room);
           updateRoom(roomCode);
@@ -93,8 +94,46 @@ function parseRoom(room) {
   return room;
 }
 
+function objectToArray(obj) {
+  let arr = [];
+  var arr_obj = Object.keys(obj).map(key => {
+    arr.push(obj[key]);
+  });
+ 
+  return arr;
+}
+
+Array.prototype.random = function () {
+  return this[Math.floor((Math.random()*this.length))];
+}
 
 
+function startGameForRoom(room) {
+  /**
+   * Create a copy of deck
+   * Deal cards and remove dealt cards from deck
+   * Show cards for every user
+   */
+  console.log('STARTING GAME:', room)
+  let players = room.players
+  
+  
+  players.map(player => {
+    let cards = player['cards'] = []
+    for (let i = 0; i < 10; i++) {
+      const cardToDeal = originalDeck.white.random()
+      player.cards.push(cardToDeal)
+    }
+    player.cards = objectToArray(player.cards)
+
+  })
+
+  updateRoomDb(room.room, room)
+
+  return room
+  // console.log('TESTING DEALT CARDS:', room)
+
+}
 
 async function getRoom(roomCode) {
   return await db
@@ -212,16 +251,7 @@ io.on("connection", function(socket) {
     setReady(e.roomCode, e.name);
   });
 
-  socket.on("startGameForRoom", room => {
-    /**
-     * Create a copy of deck
-     * Deal cards and remove dealt cards from deck
-     * Show cards for every user
-     */
-
-    
-
-  });
+  
 
   socket.on("requestUpdate", e => {
     updateRoom(e);

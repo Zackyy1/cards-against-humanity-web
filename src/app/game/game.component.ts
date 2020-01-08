@@ -14,12 +14,7 @@ export class GameComponent implements OnInit {
   room: any;
   myName: string;
   cardsShown: boolean = false
-  myCards: Array<any> = [
-    'Having to poop so bad you shit yourself.',
-    'Hannah Montana.',
-    'Whatever you wish, mother.',
-    'Snorting coke, banging hookers and having a good time overall.',
-]
+  myCards
   currentCardInFrontIndex = 1
 
   @Output() selectedCards: Array<string> = []
@@ -43,6 +38,12 @@ export class GameComponent implements OnInit {
     this.socket.on('roomUpdate'+this.roomCode.toString(), room => {
       console.log('Update recieved:', room)
       this.room = room
+      
+      this.room.players.map(plr => {
+        if (plr.name == this.myName) {
+          this.myCards = this.objectToArray(plr.cards)
+        }
+      })
     })
 
     $('.my-cards-button').click( e => {
@@ -53,10 +54,15 @@ export class GameComponent implements OnInit {
       console.log(e.target)
     })
 
-    
+  }
 
-
-
+  objectToArray(obj) {
+    let arr = [];
+    var arr_obj = Object.keys(obj).map(key => {
+      arr.push(obj[key]);
+    });
+   
+    return arr;
   }
 
   test() {

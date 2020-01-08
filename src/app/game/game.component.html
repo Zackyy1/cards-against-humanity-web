@@ -8,25 +8,6 @@
     </div>
   </div>
 
-  <!-- <div class="my-cards" *ngIf="cardsShown == true">
-
-    <div class="white-card-wrapper-left" *ngIf="myCards[currentCardInFrontIndex-1] != null">
-      <div class="white-card">
-        <p class="white-card-text">{{myCards[currentCardInFrontIndex-1]}}</p>
-      </div>
-    </div>
-    <div class="white-card-wrapper-right" *ngIf="myCards[currentCardInFrontIndex+1] != null">
-      <div class="white-card">
-        <p class="white-card-text">{{myCards[currentCardInFrontIndex+1]}}</p>
-      </div>
-    </div>
-    <div class="white-card-wrapper" >
-      <div class="white-card" id="mainCard">
-        <p class="white-card-text">{{myCards[currentCardInFrontIndex]}}</p>
-      </div>
-    </div>
-  </div> -->
-
   <app-mycards [cardsShown]="cardsShown" [myName]="myName" [room]="room" [myCards]="myCards" [currentCardInFrontIndex]="currentCardInFrontIndex" [(selectedCards)]="selectedCards"></app-mycards>
 
   <div class="my-cards-button">

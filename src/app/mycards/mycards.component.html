@@ -1,13 +1,18 @@
 <div class="my-cards" [ngClass]="cardsShown == true ? 'show' : 'noclass'">
 
-  <div class="white-card-wrapper" *ngFor="let card of myCards" >
-    <div class="white-card" >
-      <p class="white-card-text">{{card}}</p>
-      <div class="indicator"
-        *ngIf="room && myName != room['czar']" 
-        (click)="trySelecting($event)">
-          <h3 class="indicatorLabel">+</h3>
+  <!-- <div class="check" *ngIf="myCards && myCards.length > 0"> -->
+
+  
+    <div class="white-card-wrapper" *ngFor="let card of myCards" >
+      <div class="white-card" >
+        <p class="white-card-text">{{card.text}}</p>
+        <div class="indicator"
+          *ngIf="room && myName != room['czar']" 
+          (click)="trySelecting($event)">
+            <h3 class="indicatorLabel">+</h3>
+        </div>
       </div>
     </div>
-  </div>
+
+  <!-- </div> -->
 </div>
