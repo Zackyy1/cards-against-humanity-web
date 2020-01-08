@@ -42,13 +42,13 @@ $img-color: #2a2824;
 }
 
 .dim-bg {
-    background-color: rgba(0, 0, 0, 0.336);
+    background-color: rgba(0, 0, 0, 0.288);
     position: fixed;
     // width: 100%;
     // height: 100%;
     // margin-top: -140px !important;
     bottom: 0;top: 0;right: 0;left: 0;
-    z-index: 1;
+    // z-index: 1;
 }
 
 .my-cards {
@@ -112,6 +112,7 @@ $img-color: #2a2824;
     width: 100%;
     z-index: 300;
     position: absolute;
+    bottom: 0;
     .img-wrapper {
         margin: 0 auto;
         img {
@@ -131,8 +132,13 @@ $img-color: #2a2824;
 
 .top {
     z-index: 500 !important;
-    img {
+    // background-color: #fff;
+    .img-wrapper 
+    {
+        img {
+        z-index: 500 !important;
         transform: rotate(180deg);
+    }
     }
 }
 

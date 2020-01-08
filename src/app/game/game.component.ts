@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -12,14 +13,16 @@ export class GameComponent implements OnInit {
   roomCode: any;
   room: any;
   myName: string;
-  cardsShown: boolean
+  cardsShown: boolean = false
   myCards: Array<any> = [
     'Having to poop so bad you shit yourself.',
     'Hannah Montana.',
-    'Whatever you wish, mother.'
+    'Whatever you wish, mother.',
+    'Snorting coke, banging hookers and having a good time overall.',
 ]
   currentCardInFrontIndex = 1
 
+  @Output() selectedCards: Array<string> = []
   
 
   constructor(private socket: Socket,
@@ -64,12 +67,12 @@ export class GameComponent implements OnInit {
     if (this.cardsShown) {
       this.cardsShown = !this.cardsShown
       // hide cards
-      $('.img-wrapper').removeClass('top')
+      $('.my-cards-button').removeClass('top')
       // $('.my-cards-button').toFront();
     } else {
       this.cardsShown = !this.cardsShown
       // show cards
-      $('.img-wrapper').addClass('top')
+      $('.my-cards-button').addClass('top')
       // $('.my-cards-button').toFront();
       
 

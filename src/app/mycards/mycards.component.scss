@@ -1,60 +1,50 @@
 @import '../../styles.scss';
 
-$card-width: 65%;
+$card-width: 68vw;
 $img-color: #2a2824;
 
 
-.dim-bg {
-    background-color: rgba(0, 0, 0, 0.336);
-    position: fixed;
-    // width: 100%;
-    // height: 100%;
-    // margin-top: -140px !important;
-    bottom: 0;top: 0;right: 0;left: 0;
-    z-index: 1;
-}
-
 .my-cards {
     position: absolute;
-    margin-top: 0px;
-    // background-color: rgba(0, 0, 0, 0.336);
+    display: none;
+    opacity: 0;
     top: 0;bottom: 0;left: 0;right: 0;
-    width: 100%;
     height: 100%;
-    // overflow: hidden;
     z-index: 4;
+    // display: flex;
+    flex-direction:row;
+    // justify-content: space-evenly;
+    // overflow: hidden;
+    overflow-x: scroll;
+    scroll-margin-right: 50px;
+    
 }
 
-.white-card-wrapper-left {
-   
-    width: 50%;
-    margin: 9rem 0 0 1rem;
-    position: absolute;
-}
-
-.white-card-wrapper-right {
-   
-    width: 50%;
-    margin: 9rem 1rem 0 0;
-    right: 0;
-    position: absolute;
+.show {
+    display: flex !important;
+    opacity: 1 !important;
 }
 
 .white-card-wrapper {
+    // width: fit-content;
+    float: left;
+    // display: flex;
+    // flex-direction: row;
+    // justify-content: flex-start;
+    margin: 6.5rem -25px 0 14%;
    
-    width: $card-width;
-    margin: 0 auto;
-    margin-top: 7rem;
-    position: relative;
+    
 }
 
 .white-card {
+    width: $card-width;
     background-color: $light;
     color: black;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 17px;
     padding: 0.1rem 0.5rem;
     padding-bottom: 150%;
+    position: relative;
 
     p {
         position: absolute;
@@ -63,13 +53,47 @@ $img-color: #2a2824;
         font-weight: normal;
         font-size: 23px;
         line-height: 34px;
-
+        word-wrap: break-word;
         color: black;
-        padding: 0 0.5rem;
+        width: inherit;
+        // padding: 0 0.5rem;
+    }
+
+    .indicator {
+        position: absolute;
+        bottom: -20px;right: -10px;
+        // bottom: 0;right: 0;
+        // margin-bottom: -20px; margin-right: -10px;
+        width: 90px;
+        height: 90px;
+        border-radius: 90px;
+        background-color: rgb(78, 78, 78);
+        color: white;
+        
+        box-shadow: 
+        inset 4px 4px 4px 0 rgba(105, 105, 105, 0.356),
+        4px 4px 4px 0 rgba(0, 0, 0, 0.603);
+        h3 {
+            font-size: 60px;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            // top: 0; right: 0; left: 0; bottom: 0;
+            margin-left: 30px;
+            margin-top: 11px;
+        }
     }
     
 }
 
+
+.selected {
+    background-color: rgb(62, 136, 47) !important;
+    h3 {
+        margin-left: 20px !important;
+        margin-top: 6px !important;
+    }
+}
 
 .top {
     z-index: 500 !important;

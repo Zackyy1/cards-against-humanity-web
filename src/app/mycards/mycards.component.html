@@ -1,18 +1,13 @@
-<div class="my-cards" *ngIf="cardsShown == true">
+<div class="my-cards" [ngClass]="cardsShown == true ? 'show' : 'noclass'">
 
-  <div class="white-card-wrapper-left" *ngIf="myCards[currentCardInFrontIndex-1] != null">
-    <div class="white-card">
-      <p class="white-card-text">{{myCards[currentCardInFrontIndex-1]}}</p>
-    </div>
-  </div>
-  <div class="white-card-wrapper-right" *ngIf="myCards[currentCardInFrontIndex+1] != null">
-    <div class="white-card">
-      <p class="white-card-text">{{myCards[currentCardInFrontIndex+1]}}</p>
-    </div>
-  </div>
-  <div class="white-card-wrapper" >
-    <div class="white-card" id="mainCard">
-      <p class="white-card-text">{{myCards[currentCardInFrontIndex]}}</p>
+  <div class="white-card-wrapper" *ngFor="let card of myCards" >
+    <div class="white-card" >
+      <p class="white-card-text">{{card}}</p>
+      <div class="indicator"
+        *ngIf="room && myName != room['czar']" 
+        (click)="trySelecting($event)">
+          <h3 class="indicatorLabel">+</h3>
+      </div>
     </div>
   </div>
 </div>

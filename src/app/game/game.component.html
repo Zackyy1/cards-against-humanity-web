@@ -27,7 +27,7 @@
     </div>
   </div> -->
 
-  <app-mycards [cardsShown]="cardsShown" [myCards]="myCards" [currentCardInFrontIndex]="currentCardInFrontIndex"></app-mycards>
+  <app-mycards [cardsShown]="cardsShown" [myName]="myName" [room]="room" [myCards]="myCards" [currentCardInFrontIndex]="currentCardInFrontIndex" [(selectedCards)]="selectedCards"></app-mycards>
 
   <div class="my-cards-button">
     <div class="img-wrapper">
@@ -35,5 +35,9 @@
     </div>
     <h2 class="my-cards-label">My cards</h2>
   </div>
+
+  <!-- <ng-template #forHost>
+    <h2>I'm host!</h2>
+  </ng-template> -->
   
 </div>
