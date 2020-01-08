@@ -13,6 +13,14 @@ export class GameComponent implements OnInit {
   room: any;
   myName: string;
   cardsShown: boolean
+  myCards: Array<any> = [
+    'Having to poop so bad you shit yourself.',
+    'Hannah Montana.',
+    'Whatever you wish, mother.'
+]
+  currentCardInFrontIndex = 1
+
+  
 
   constructor(private socket: Socket,
     private cookie: CookieService,
@@ -22,6 +30,7 @@ export class GameComponent implements OnInit {
 
     const url = document.URL
     this.roomCode = Number(url.substring(url.search('game/')+'game/'.length, url.length))
+    
     
      }
 
@@ -37,7 +46,18 @@ export class GameComponent implements OnInit {
       this.showMyCards();
     })
 
+    $('div#mainCard.white-card').click(e => {
+      console.log(e.target)
+    })
 
+    
+
+
+
+  }
+
+  test() {
+    console.log("TEST WORKED")
   }
 
   showMyCards() {
@@ -51,6 +71,7 @@ export class GameComponent implements OnInit {
       // show cards
       $('.img-wrapper').addClass('top')
       // $('.my-cards-button').toFront();
+      
 
     }
   }

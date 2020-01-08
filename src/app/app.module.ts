@@ -9,6 +9,7 @@ import { EntryComponent } from './entry/entry.component';
 import { CookieService } from 'ngx-cookie-service'
 import { environment } from 'src/environments/environment';
 import { GameComponent } from './game/game.component';
+import { MycardsComponent } from './mycards/mycards.component';
 // import * as fs from 'fs'
 
 const env_url = environment.url
@@ -28,7 +29,8 @@ var config: SocketIoConfig = { url: env_url,
     AppComponent,
     LobbyComponent,
     EntryComponent,
-    GameComponent
+    GameComponent,
+    MycardsComponent
   ],
   imports: [
     BrowserModule,

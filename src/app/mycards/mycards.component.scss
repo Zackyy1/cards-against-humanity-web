@@ -3,43 +3,6 @@
 $card-width: 65%;
 $img-color: #2a2824;
 
-.game {
-    margin-top: 50px;
-   
-}
-
-.black-card-wrapper {
-   
-    width: $card-width;
-    // padding-bottom: 75%;
-    margin: 0 auto;
-    margin-top: 7rem;
-    position: relative;
-}
-
-.black-card {
-    background-color: $black-card;
-    color: white;
-    // width: 100%;
-    
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 17px;
-    padding: 0.1rem 0.5rem;
-    padding-bottom: 150%;
-
-    p {
-        position: absolute;
-        font-family: Roboto;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 26px;
-        line-height: 34px;
-
-        color: #E8E8E8;
-        padding: 0 0.5rem;
-    }
-    
-}
 
 .dim-bg {
     background-color: rgba(0, 0, 0, 0.336);
@@ -107,27 +70,6 @@ $img-color: #2a2824;
     
 }
 
-.my-cards-button {
-    margin: 0 auto;
-    width: 100%;
-    z-index: 300;
-    position: absolute;
-    .img-wrapper {
-        margin: 0 auto;
-        img {
-            display: flex;
-            margin: 0 auto;
-            width: 80px;
-            margin-top: 3rem;
-        }
-    }
-    .my-cards-label {
-        text-align: center;
-        margin-top: 5px;
-        font-size: 1.5rem;
-        color: $img-color;
-    }
-}
 
 .top {
     z-index: 500 !important;

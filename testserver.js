@@ -61,7 +61,7 @@ const cors = require('cors')({origin: '*'});
           cert,
           ca,
     hostname: 'cards.rendemental.com',
-    port: 443, 
+    port: 80, 
     requestCert: false,
     rejectUnauthorized: false}, 
 app);

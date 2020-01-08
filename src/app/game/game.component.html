@@ -8,27 +8,26 @@
     </div>
   </div>
 
-  <div class="my-cards" *ngIf="cardsShown == true">
+  <!-- <div class="my-cards" *ngIf="cardsShown == true">
 
-    <div class="white-card-wrapper-left">
+    <div class="white-card-wrapper-left" *ngIf="myCards[currentCardInFrontIndex-1] != null">
       <div class="white-card">
-        <p class="white-card-text">Having to poop so bad you shit yourself</p>
+        <p class="white-card-text">{{myCards[currentCardInFrontIndex-1]}}</p>
       </div>
     </div>
-    <div class="white-card-wrapper-right">
+    <div class="white-card-wrapper-right" *ngIf="myCards[currentCardInFrontIndex+1] != null">
       <div class="white-card">
-        <p class="white-card-text">Hannah Montana </p>
+        <p class="white-card-text">{{myCards[currentCardInFrontIndex+1]}}</p>
       </div>
     </div>
-    <div class="white-card-wrapper">
-      <div class="white-card">
-        <p class="white-card-text">Whatever you wish, mother</p>
+    <div class="white-card-wrapper" >
+      <div class="white-card" id="mainCard">
+        <p class="white-card-text">{{myCards[currentCardInFrontIndex]}}</p>
       </div>
     </div>
+  </div> -->
 
-    
-
-  </div>
+  <app-mycards [cardsShown]="cardsShown" [myCards]="myCards" [currentCardInFrontIndex]="currentCardInFrontIndex"></app-mycards>
 
   <div class="my-cards-button">
     <div class="img-wrapper">
