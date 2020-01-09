@@ -2,9 +2,25 @@
 
   <div class="dim-bg"  *ngIf="cardsShown == true"></div>
 
-  <h2 class="you-are-czar" *ngIf="room && myName == room['czar']" >You are the Czar!</h2>
-  <h2 class="you-are-czar" *ngIf="room && myName != room['czar']" >{{room['czar']}} is the Czar!</h2>
   <h2 class="helper">{{helperText}}</h2>
+
+  <div class="no-labels" *ngIf="room && myName != room['czar'] && isJudging == false">
+    <h2 class="you-are-czar" *ngIf="room && myName != room['czar']" >{{room['czar']}} is the Czar!</h2>
+  </div>
+
+  <div class="judging" *ngIf="isJudging == true">
+    <div class="white-card-wrapper" *ngFor="let card of room.selectedCards" >
+      <div class="white-card" >
+        <p class="white-card-text">{{card}}</p>
+        <div class="selector"
+          *ngIf="room && myName == room['czar']" 
+          (click)="chooseWinner($event)">
+            <h3 class="selectorLabel">+</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 
   <button class="test-btn" (click)="restartRound()">Restart round</button>
   <div class="black-card-wrapper">
@@ -15,12 +31,18 @@
 
   <app-mycards [cardsShown]="cardsShown" [myName]="myName" [room]="room" [myCards]="myCards" [currentCardInFrontIndex]="currentCardInFrontIndex" [(selectedCards)]="selectedCards"></app-mycards>
 
-  <div class="my-cards-button">
-    <div class="img-wrapper">
-      <img src="../../assets/arrow.png" alt="">
+  <!-- <div > -->
+    <div class="my-cards-button" >
+      <div *ngIf="isJudging == false">
+        <div class="img-wrapper">
+          <img src="../../assets/arrow.png" alt="">
+        </div>
+        <h2 class="my-cards-label">My cards</h2>
+      </div>
+     
     </div>
-    <h2 class="my-cards-label">My cards</h2>
-  </div>
+  <!-- </div> -->
+  
 
   
 </div>

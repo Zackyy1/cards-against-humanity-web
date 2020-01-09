@@ -314,10 +314,11 @@ io.on("connection", function(socket) {
           }
           room["selectedCards"][player.name] = cards[0];
           console.log("Updated selected cards:", room["selectedCards"]);
-          if (Object.keys(room['selectedCards']).length == room.players.length-1) {
+          if (Object.keys(room['selectedCards']).length == (room.players.length * room.black.pick)-room.black.pick ) {
             // All have chosen a card
             console.log('Everyone has chosen a card')
             io.emit('judgement'+room.room)
+            updateRoom(room.room)
           }
           updateRoomDb(room.room, room);
         }

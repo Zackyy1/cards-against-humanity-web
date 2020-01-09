@@ -8,11 +8,22 @@ $img-color: #2a2824;
    
 }
 
+.judging {
+    position: absolute;
+    display: flex !important;
+    top: 40%;bottom: 0;left: 0;right: 0;
+    // height: 100%;
+    z-index: 400;
+    flex-direction:row;
+    overflow-wrap: unset;
+    overflow-x: scroll;
+}
+
 .helper {
     text-align: center;
     padding: 0 0.5rem;
     font-size: 1.2rem;
-    margin: auto 1rem;
+    margin: 3.5rem auto 0 0;
     // margin-top: 5rem;
     color: $dark;
 }
@@ -68,58 +79,54 @@ $img-color: #2a2824;
     // z-index: 1;
 }
 
-.my-cards {
-    position: absolute;
-    margin-top: 0px;
-    // background-color: rgba(0, 0, 0, 0.336);
-    top: 0;bottom: 0;left: 0;right: 0;
-    width: 100%;
-    height: 100%;
-    // overflow: hidden;
-    z-index: 4;
-}
-
-.white-card-wrapper-left {
-   
-    width: 50%;
-    margin: 9rem 0 0 1rem;
-    position: absolute;
-}
-
-.white-card-wrapper-right {
-   
-    width: 50%;
-    margin: 9rem 1rem 0 0;
-    right: 0;
-    position: absolute;
-}
-
 .white-card-wrapper {
+    float: left;
+    margin: 0rem 2rem 0 0rem;
    
-    width: $card-width;
-    margin: 0 auto;
-    margin-top: 7rem;
-    position: relative;
 }
 
 .white-card {
+    width: 50vw;
     background-color: $light;
     color: black;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 17px;
-    padding: 0.1rem 0.5rem;
+    padding: 0.1rem 1rem;
     padding-bottom: 150%;
+    position: relative;
 
     p {
         position: absolute;
         font-family: Roboto;
         font-style: normal;
         font-weight: normal;
-        font-size: 23px;
+        font-size: 22px;
         line-height: 34px;
-
+        word-wrap: break-word;
         color: black;
-        padding: 0 0.5rem;
+        width: inherit;
+    }
+
+    .selector {
+        position: absolute;
+        bottom: -10px;right: -5px;
+        width: 70px;
+        height: 70px;
+        border-radius: 70px;
+        background-color: rgb(78, 78, 78);
+        color: white;
+        
+        box-shadow: 
+        inset 4px 4px 4px 0 rgba(105, 105, 105, 0.356),
+        4px 4px 4px 0 rgba(0, 0, 0, 0.603);
+        h3 {
+            font-size: 60px;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            margin-left: 20px;
+            margin-top: 1px;
+        }
     }
     
 }
@@ -127,7 +134,7 @@ $img-color: #2a2824;
 .my-cards-button {
     margin: 0 auto;
     width: 100%;
-    z-index: 300;
+    z-index: 800;
     position: absolute;
     bottom: 0;
     .img-wrapper {

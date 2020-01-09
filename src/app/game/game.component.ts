@@ -17,6 +17,7 @@ export class GameComponent implements OnInit {
   myCards
   helperText: string = "Game is on!"
   currentCardInFrontIndex = 1
+  isJudging: boolean = false
 
   @Output() selectedCards: Array<string> = []
   
@@ -34,6 +35,17 @@ export class GameComponent implements OnInit {
      }
 
   ngOnInit() {
+
+    $('.my-cards-button').click( e => {
+      console.log('CLICKED')
+      this.showMyCards();
+    })
+
+    $('div#mainCard.white-card').click(e => {
+      console.log(e.target)
+    })
+
+
     window.scrollTo(0, 0)
     this.socket.emit('requestUpdate', this.roomCode.toString())
     this.socket.on('roomUpdate'+this.roomCode.toString(), room => {
@@ -50,20 +62,18 @@ export class GameComponent implements OnInit {
           return true
         }
       })
+      if (this.room && this.room['selectedCards'] && Object.keys(this.room['selectedCards']).length == (this.room.players.length * this.room.black.pick)-this.room.black.pick ) {
+        this.room['selectedCards'] = this.objectToArray(this.room['selectedCards'])
+        this.judgement()
+      }
     })
 
     this.socket.on('judgement'+this.roomCode, e => {
-      this.cardsShown = false
-      this.helperText = this.room.czar + " is choosing the best card, you fools!"
+      this.judgement()
     })
 
-    $('.my-cards-button').click( e => {
-      this.showMyCards();
-    })
+    
 
-    $('div#mainCard.white-card').click(e => {
-      console.log(e.target)
-    })
 
   }
 
@@ -76,6 +86,14 @@ export class GameComponent implements OnInit {
     return arr;
   }
 
+  judgement() {
+    this.cardsShown = false
+    this.helperText = this.room.czar + " is choosing the best card, you fools!"
+    this.isJudging = true
+    console.log('JUDGEMENT BEGINS!')
+
+  }
+
   restartRound() {
     this.socket.emit('restartRound', this.room)
   }
@@ -84,7 +102,15 @@ export class GameComponent implements OnInit {
     console.log("TEST WORKED")
   }
 
+  chooseWinner(e) {
+    console.log('Winner card?', e)
+    if (confirm('Is this the winner card?')) {
+      console.log('HE WON!')
+    }
+  }
+
   showMyCards() {
+    console.log('Showing')
     if (this.cardsShown) {
       this.cardsShown = !this.cardsShown
       // hide cards
@@ -99,12 +125,4 @@ export class GameComponent implements OnInit {
 
     }
   }
-
-  /**
-   * 
-   * Todo: 
-   * czar functionality, card selections, db connections
-   */
-
-
 }

@@ -13,7 +13,7 @@ var serviceAccount = require("./cah-web-4f057-firebase-adminsdk-54ath-29f0561f4f
 
   const html = __dirname + '/dist/cards-against-humanity';
   const apiUrl = '/api';
-  const port = 4444;
+  const port = 443;
 
 
   // Start server
@@ -60,8 +60,8 @@ const cors = require('cors')({origin: '*'});
           key,
           cert,
           ca,
-    hostname: 'cards.rendemental.com',
-    port: 80, 
+    // hostname: 'cards.rendemental.com',
+    // port: port, 
     requestCert: false,
     rejectUnauthorized: false}, 
 app);
@@ -69,8 +69,8 @@ app);
   var server2 = http.createServer(app);
   
 
-  server.listen(4444, function () {
-        console.log('Started listening on *4444')
+  server.listen(port, function () {
+        console.log('Started listening on '+port)
   });
 
 //   server2.listen(4443, '0.0.0.0', function () {
