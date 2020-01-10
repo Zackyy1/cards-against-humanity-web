@@ -85,6 +85,14 @@ $img-color: #2a2824;
     }
 }
 
+.selectedMultiple {
+    background-color: rgb(62, 136, 47) !important;
+    h3 {
+        margin-left: 28px !important;
+        margin-top: 10px !important;
+    }
+}
+
 .top {
     z-index: 500 !important;
     img {

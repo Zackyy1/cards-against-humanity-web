@@ -107,6 +107,9 @@ function parseRoom(room) {
     // console.log("Working on", obj[key]);
   });
   room.players = arr;
+  for (let i in room.selectedCards) {
+    room.selectedCards[i] = objectToArray(room.selectedCards[i])
+  }
   return room;
 }
 
@@ -127,7 +130,11 @@ function startRound(roomCode, room) {
   room = parseRoom(room);
   // Assign a black card to the room
   const randomCart = originalDeck.black.random();
-  room["black"] = { text: randomCart.text, pick: randomCart.pick };
+  room["black"] = { 
+    text: randomCart.text+'\nTEST PICK 3', 
+      // pick: randomCart.pick 
+      pick: 3
+  };
   console.log("Assigning a black card:", room["black"]);
 
   // Choose a czar
@@ -301,22 +308,29 @@ io.on("connection", function(socket) {
       // console.log('Recieved:', room, player, cards)
       // room = parseRoom(room)
   
+
+      console.log('CARDS:', cards)
   
       cards = objectToArray(cards)
       room.players.map(plr => {
         plr.cards = objectToArray(plr.cards)
         if (plr.name == player.name) {
-          console.log(player.name, "has selected a card", cards);
-          console.log('Checking selected cards:', room['selectedCards'])
+          console.log(player.name, "has selected cards", cards);
+          // console.log('Checking selected cards:', room['selectedCards'])
           if (room["selectedCards"] == null) {
             room["selectedCards"] = {};
             console.log("RESET");
           }
-          room["selectedCards"][player.name] = cards[0];
+          room["selectedCards"][player.name] = cards;
           console.log("Updated selected cards:", room["selectedCards"]);
-          if (Object.keys(room['selectedCards']).length == (room.players.length * room.black.pick)-room.black.pick ) {
-            // All have chosen a card
-            console.log('Everyone has chosen a card')
+          if (Object.keys(room['selectedCards']).length == room.players.length - 1) {
+            
+            // Remove cards from players
+            for (let plr in room['selectedCards']) {
+              // DO HERE
+              // console.log(room['selectedCards'])
+            }
+
             io.emit('judgement'+room.room)
             updateRoom(room.room)
           }
@@ -329,6 +343,20 @@ io.on("connection", function(socket) {
 
     
   });
+
+  socket.on('winnerSelected', obj => {
+    // Recieve winner name
+    console.log('Winner:', obj.winner)
+    let room = obj.room
+    // grant him a point
+    getRoom(room.room).then(room2 => {
+      room3 = room2.toJSON()
+      room = parseRoom(room3)
+      console.log('Recieved winner with room looking like this:', room)
+      console.log('Players"s cards', room.players[0].cards)
+    })
+    // Add cards to hands
+  })
  
 
   socket.on("requestUpdate", e => {

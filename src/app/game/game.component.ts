@@ -37,14 +37,8 @@ export class GameComponent implements OnInit {
   ngOnInit() {
 
     $('.my-cards-button').click( e => {
-      console.log('CLICKED')
       this.showMyCards();
     })
-
-    $('div#mainCard.white-card').click(e => {
-      console.log(e.target)
-    })
-
 
     window.scrollTo(0, 0)
     this.socket.emit('requestUpdate', this.roomCode.toString())
@@ -58,12 +52,15 @@ export class GameComponent implements OnInit {
         // console.log('Comparing', plr, this.myName)
         if (plr.name == this.myName) {
           this.myCards = plr.cards
-          console.log(plr.name, 'THIS MYCARDS', this.myCards)
           return true
         }
       })
-      if (this.room && this.room['selectedCards'] && Object.keys(this.room['selectedCards']).length == (this.room.players.length * this.room.black.pick)-this.room.black.pick ) {
-        this.room['selectedCards'] = this.objectToArray(this.room['selectedCards'])
+      if (this.room && this.room['selectedCards'] && Object.keys(this.room['selectedCards']).length == this.room.players.length - 1) {
+        this.room['selectedCardsArray'] = this.objectToArray(this.room['selectedCards'])
+        // Turn cards of players into arrays
+        for (let plr in this.room['selectedCards']) {
+          this.room['selectedCards'][plr] = [this.room['selectedCards'][plr]]
+        }
         this.judgement()
       }
     })
@@ -86,11 +83,27 @@ export class GameComponent implements OnInit {
     return arr;
   }
 
+  overlapAll(e) {
+    const clickedOn = $(e.target)
+
+    $('.white-card-judgement').css('z-index', '300')
+    if (clickedOn.hasClass('white-card-text')) {
+      console.log('CHECK')
+      console.log($(clickedOn[0].parentElement))
+      $(clickedOn[0].parentElement).css('z-index', '1600')
+    } else {
+      clickedOn.css('z-index', '1600')
+
+    }
+
+  }
+
   judgement() {
     this.cardsShown = false
     this.helperText = this.room.czar + " is choosing the best card, you fools!"
     this.isJudging = true
     console.log('JUDGEMENT BEGINS!')
+    
 
   }
 
@@ -98,19 +111,46 @@ export class GameComponent implements OnInit {
     this.socket.emit('restartRound', this.room)
   }
 
-  test() {
-    console.log("TEST WORKED")
+  confirmPopup(e):boolean {
+    const popup = $('.confirm-popup')
+    let toReturn = false
+    !popup.hasClass('show') ? popup.addClass('show') : popup.removeClass('show')
+    $('#yes').on('click', r => {
+      toReturn = true
+      popup.removeClass('show')
+      $('#cancel').off();
+      $('#yes').off();
+      this.chooseWinner($(e.target.parentElement.parentElement)[0].firstElementChild.innerText.trim());
+      // console.log(this.room.selectedCards)
+    })
+    $('#cancel').on('click', e => {
+      popup.removeClass('show')
+      $('#cancel').off();
+      $('#yes').off();
+      
+    })
+    return toReturn
   }
 
   chooseWinner(e) {
-    console.log('Winner card?', e)
-    if (confirm('Is this the winner card?')) {
-      console.log('HE WON!')
+    // Find whose card was it
+    console.log('WINNER SELECTED', e)
+    console.log('CHECK', this.room.selectedCards)
+    for (let plr in this.room.selectedCards) {
+      console.log('Searching '+ e + ' for', plr,"'s cards in", this.room.selectedCards)
+      if (this.room.selectedCards[plr][0].includes(e) || e == this.room.selectedCards[plr]) {
+        console.log('Winner is', plr)
+        this.socket.emit('winnerSelected', {winner: plr, room: this.room})
+        return 
+      } else {
+        console.log('Winner not found...')
+        
+      }
     }
+    
   }
 
   showMyCards() {
-    console.log('Showing')
     if (this.cardsShown) {
       this.cardsShown = !this.cardsShown
       // hide cards

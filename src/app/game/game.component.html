@@ -8,13 +8,27 @@
     <h2 class="you-are-czar" *ngIf="room && myName != room['czar']" >{{room['czar']}} is the Czar!</h2>
   </div>
 
-  <div class="judging" *ngIf="isJudging == true">
-    <div class="white-card-wrapper" *ngFor="let card of room.selectedCards" >
-      <div class="white-card" >
-        <p class="white-card-text">{{card}}</p>
+  <div class="confirm-popup">
+    <!-- <div class="dim-bg"></div> -->
+    <div class="popup-window">
+      <p>Confirm winner?</p>
+      <div class="buttons">
+        <button id="yes">Yes</button>
+        <button id="cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="judging" *ngIf="room && room.selectedCards && isJudging == true && room.selectedCardsArray">
+    <div class="white-card-wrapper-judgement" *ngFor="let card of room.selectedCardsArray" >
+      <div class="white-card-judgement" 
+      (click)="this.overlapAll($event)" 
+      [ngClass]="card2==card[1] ? 'offset' : card2==card[2] ? 'offset2' : 'noclass'" 
+      *ngFor="let card2 of card">
+        <p class="white-card-text" >{{card2}}</p>
         <div class="selector"
-          *ngIf="room && myName == room['czar']" 
-          (click)="chooseWinner($event)">
+          *ngIf="room && myName == room['czar'] && card2==card[card.length-1]" 
+          (click)="confirmPopup($event)">
             <h3 class="selectorLabel">+</h3>
         </div>
       </div>

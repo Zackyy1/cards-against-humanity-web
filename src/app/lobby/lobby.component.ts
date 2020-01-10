@@ -47,6 +47,7 @@ export class LobbyComponent implements OnInit {
 
   setReady() {
     // TODO:
+    $('.ready-button').hide()
     this.socket.emit('ready', {roomCode:this.roomCode, name: this.myName})
   }
 
