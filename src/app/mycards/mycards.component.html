@@ -2,7 +2,11 @@
 
   <!-- <div class="check" *ngIf="myCards && myCards.length > 0"> -->
 
-  
+    <div class="pick-wrapper" *ngIf="room && room.czar != myName">
+      <h2 class="pick">Pick {{room.black.pick}}</h2>
+
+    </div>
+
     <div class="white-card-wrapper" *ngFor="let card of myCards" >
       <div class="white-card" >
         <p class="white-card-text">{{card.text}}</p>

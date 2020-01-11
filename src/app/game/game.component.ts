@@ -15,9 +15,11 @@ export class GameComponent implements OnInit {
   myName: string;
   cardsShown: boolean = false
   myCards
+  myScore: number
   helperText: string = "Game is on!"
   currentCardInFrontIndex = 1
   isJudging: boolean = false
+  winner = null
 
   @Output() selectedCards: Array<string> = []
   
@@ -69,9 +71,32 @@ export class GameComponent implements OnInit {
       this.judgement()
     })
 
+    this.socket.on('winner'+this.roomCode.toString(), e => {
+      console.log('Recieved winner:', e)
+      this.winner = e;
+      // $('.winner-label').addClass('winner-show')
+      this.isJudging = false;
+      this.helperText = e.name+' has won! Score: ' + e.score
+      let score = this.getMyScore()
+      setTimeout(() => {
+        this.helperText = "Game is on! My score: " + score
+        this.winner = null
+      }, 5000);
+    })
+
     
 
 
+  }
+
+  getMyScore() {
+    let toReturn = -1
+    this.room.players.map(plr => {
+      if (plr.name == this.myName) {
+        toReturn = plr.score
+      }
+    })
+    return toReturn
   }
 
   objectToArray(obj) {
@@ -108,7 +133,11 @@ export class GameComponent implements OnInit {
   }
 
   restartRound() {
-    this.socket.emit('restartRound', this.room)
+    console.log('Check', this.room)
+    if (this.room) {
+      this.socket.emit('restartRound', this.room)
+
+    }
   }
 
   confirmPopup(e):boolean {

@@ -15,24 +15,22 @@ export class MycardsComponent implements OnInit {
   @Input() room
   @Input() selectedCards: Array<string>
   @Input() myName: string
-
+  @Input() roomCode: number
   constructor(private socket: Socket) { 
+    
   }
 
   ngOnInit() {
     console.log('Appeared')
     if (this.selectedCards.length > 0) {
-      // console.log($(`div:contains(${this.selectedCards[0]})`))
+      this.selectedCards = []
     }
-    // console.log('TEST MYCARDS', this.myCards)
+    this.socket.on('winner'+this.roomCode, e => {
+      this.selectedCards = []
+    })
 
-
-    // console.log(room, myName)
   }
 
-  findPlayerInPlayers(playerName) {
-    
-  }
 
   trySelecting(e) {
     const label = $(e.target)
@@ -100,20 +98,6 @@ export class MycardsComponent implements OnInit {
         }
         return true
       }
-      
-      //update numbers on cards
-
-      // for (let i = 0; i < this.selectedCards.length; i++) {
-      //   let cardText = $('.white-card-text').toArray()[i].innerText
-      //   $('.white-card-text').toArray().map(card => {
-      //     if (card.innerText == this.selectedCards[i]) {
-      //       console.log('Giving', i+1, 'to', card.innerText)
-      //       console.log($($(card)[0].nextElementSibling)[0])
-      //       // $($($(card)[0].nextElementSibling)[0].firstChildrenElement)[0].text(i+1)
-      //     }
-      //   })
-      // }
-
 
       if (this.selectedCards.length < this.room.black.pick ) {
 
@@ -127,12 +111,14 @@ export class MycardsComponent implements OnInit {
         if (this.selectedCards.length == this.room.black.pick) {
           this.room.players.map(plr => {
             if (plr.name == this.myName) {
+
               this.socket.emit('cardSelected', 
             {
               room: this.room, 
               player: plr, 
               cards: this.selectedCards}
             )
+            this.selectedCards = []
             
             }
           })

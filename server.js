@@ -74,6 +74,14 @@ function updateRoom(roomCode) {
   });
 }
 
+function restartRound(room) {
+  room.selectedCards = null
+  room.selectedCardsArray = null
+  startRound(room.room, room);
+    updateRoomDb(room.room, room);
+    updateRoom(room.room);
+}
+
 function setReady(roomCode, playerName) {
   console.log(roomCode, playerName);
   const room2 = getRoom(roomCode).then(e => {
@@ -131,17 +139,17 @@ function startRound(roomCode, room) {
   // Assign a black card to the room
   const randomCart = originalDeck.black.random();
   room["black"] = { 
-    text: randomCart.text+'\nTEST PICK 3', 
-      // pick: randomCart.pick 
-      pick: 3
+    text: randomCart.text, 
+      pick: randomCart.pick
   };
-  console.log("Assigning a black card:", room["black"]);
 
-  // Choose a czar
   room["czar"] = room.players.random().name;
-  console.log("Assigning a czar:", room["czar"]);
 
-  // Wait for all to select cards
+  while (room['previousCzar'] == room['czar']) {
+    room["czar"] = room.players.random().name;
+  }
+  room['previousCzar'] = room['czar']
+
   room["selectedCards"] = {};
 }
 
@@ -259,9 +267,7 @@ io.on("connection", function(socket) {
   });
 
   socket.on("restartRound", room => {
-    startRound(room.room, room);
-    updateRoomDb(room.room, room);
-    updateRoom(room.room);
+    restartRound(room);
   });
 
   socket.on("createRoom", info => {
@@ -329,6 +335,29 @@ io.on("connection", function(socket) {
             for (let plr in room['selectedCards']) {
               // DO HERE
               // console.log(room['selectedCards'])
+              console.log('Checking:', room['selectedCards'][plr])
+              room['selectedCards'][plr].map(card => {
+                let plrCounter = 0;
+                console.log('WORKING ON CARD', card)
+                room.players.map(plr => {
+                  // console.log('WORKING ON PLAYER', plr)
+                  plr.cards = objectToArray(plr.cards)
+                  plr.cards.map(plrCard => {
+                    console.log('Comparin the two', plrCard.text , card)
+
+                    if (plrCard.text == card) {
+                      plr.cards.splice(plr.cards.indexOf(plrCard), 1)
+                      plrCounter++;
+                    }
+                  })
+                  for (let i = 0; i < plrCounter; i++) {
+                    plr.cards.push(originalDeck.white.random())
+                    console.log('Pushed a new card:', plr.cards[plr.cards.length-1])
+                  }
+                })
+                
+                
+              })
             }
 
             io.emit('judgement'+room.room)
@@ -346,15 +375,27 @@ io.on("connection", function(socket) {
 
   socket.on('winnerSelected', obj => {
     // Recieve winner name
-    console.log('Winner:', obj.winner)
     let room = obj.room
     // grant him a point
     getRoom(room.room).then(room2 => {
       room3 = room2.toJSON()
       room = parseRoom(room3)
-      console.log('Recieved winner with room looking like this:', room)
-      console.log('Players"s cards', room.players[0].cards)
+      // console.log('Recieved winner with room looking like this:', room)
+      // console.log('Players"s cards', room.players[0].cards)
+      console.log('FINAL', room3)
+      room3.players.map(plr => {
+        if (plr.name == obj.winner) {
+          plr.score+=1
+          io.emit('winner'+room3.room, plr)
+          room3.selectedCards = {}
+          room3.selectedCardsArray = []
+        }
+      })
+      // updateRoomDb(room3.room, room)
+      // updateRoom(room3.room)
+      restartRound(room3)
     })
+    
     // Add cards to hands
   })
  
@@ -372,7 +413,3 @@ io.on("connection", function(socket) {
     console.log("user disconnected", e);
   });
 });
-
-// app.get('/', (req, res) => {
-//   console.log(req, res)
-// })

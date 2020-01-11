@@ -4,8 +4,10 @@
 
   <h2 class="helper">{{helperText}}</h2>
 
-  <div class="no-labels" *ngIf="room && myName != room['czar'] && isJudging == false">
+  <div class="no-labels" *ngIf="room && isJudging == false">
     <h2 class="you-are-czar" *ngIf="room && myName != room['czar']" >{{room['czar']}} is the Czar!</h2>
+    <h2 class="you-are-czar" *ngIf="room && myName == room['czar']" >You are the Czar!</h2>
+
   </div>
 
   <div class="confirm-popup">
@@ -17,6 +19,10 @@
         <button id="cancel">Cancel</button>
       </div>
     </div>
+  </div>
+
+  <div class="winner-label">
+    <h2 *ngIf="winner != null">{{winner['name']}} has won! His score:{{winner['score']}}</h2>
   </div>
 
   <div class="judging" *ngIf="room && room.selectedCards && isJudging == true && room.selectedCardsArray">
@@ -36,14 +42,14 @@
   </div>
   
 
-  <button class="test-btn" (click)="restartRound()">Restart round</button>
+  <!-- <button class="test-btn" (click)="restartRound()">Restart round</button> -->
   <div class="black-card-wrapper">
     <div class="black-card">
       <p class="black-card-text" *ngIf="room && room.black">{{room.black.text}}</p>
     </div>
   </div>
 
-  <app-mycards [cardsShown]="cardsShown" [myName]="myName" [room]="room" [myCards]="myCards" [currentCardInFrontIndex]="currentCardInFrontIndex" [(selectedCards)]="selectedCards"></app-mycards>
+  <app-mycards [cardsShown]="cardsShown" [roomCode]="roomCode" [myName]="myName" [room]="room" [myCards]="myCards" [currentCardInFrontIndex]="currentCardInFrontIndex" [(selectedCards)]="selectedCards"></app-mycards>
 
   <!-- <div > -->
     <div class="my-cards-button" >

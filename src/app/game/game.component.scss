@@ -8,6 +8,35 @@ $img-color: #2a2824;
    
 }
 
+.winner-label {
+    position: absolute;
+    top: 0;bottom: 0;left: 0;right: 0;
+    background-color: rgba(17, 17, 17, 0.884);
+    z-index: 4000;
+    box-shadow: inset -15px -15px 30px black,
+    inset 15px 15px 30px black;
+    transition: 0.2s;
+    opacity: 0;
+    display: none;
+    h2 {
+        text-align: center;
+        color: white;
+        font-size: 2rem;
+        z-index: 6000;
+        background-color: rgba(20, 20, 20, 0.945);
+        width: 70%;
+        margin: 10rem auto 0;
+        padding: 0.5rem;
+        border-radius: 15px;
+    }
+}
+
+.winner-show {
+    display: block;
+    opacity: 1;
+    transition: 0.2s;
+}
+
 .confirm-popup {
     position: relative;
     display: none;
@@ -164,13 +193,15 @@ $img-color: #2a2824;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 17px;
     padding: 0.1rem 1rem;
-    padding-bottom: 100%;
+    // padding-bottom: 150%;
     margin-top: 0.5rem;
     // position: absolute;
     position: relative;
     // margin-left: 50vw;
     box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.479) !important;
     z-index: 500;
+    min-height: 400px;
+    max-height: 400px;
 
     p {
         position: absolute;
@@ -193,7 +224,7 @@ $img-color: #2a2824;
         border-radius: 70px;
         background-color: rgb(78, 78, 78);
         color: white;
-        
+        z-index: 5000;
         box-shadow: 
         inset 4px 4px 4px 0 rgba(105, 105, 105, 0.356),
         4px 4px 4px 0 rgba(0, 0, 0, 0.603);
