@@ -184,7 +184,11 @@ async function getRoom(roomCode) {
     .ref("/rooms/" + roomCode.toString())
     .once(await "value", e => {
       const res = e.toJSON();
-      // console.log("Room #" + roomCode.toString(), res);
+      if (res == null) {
+        return false
+      } esle {
+
+      
       let obj = res.players;
       let arr = [];
       var arr_obj = Object.keys(obj).map(key => {
@@ -194,6 +198,7 @@ async function getRoom(roomCode) {
       res.players = arr;
       // console.log("DEBUG", res);
       return res;
+    }
     });
 }
 
